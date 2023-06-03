@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 const Button = ({ onClick, children }) => {
   return (
     <button type="button" className={css.Button} onClick={onClick}>
-      <span>Load more</span>
+      <span>{children}</span>
     </button>
   );
 };
 
 Button.propTypes = {
-  type: PropTypes.string,
   onClick: PropTypes.func,
-  children: PropTypes.any,
+  children: PropTypes.node,
 };
+
 export default Button;

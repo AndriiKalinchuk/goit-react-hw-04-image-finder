@@ -1,45 +1,47 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import css from './Searchbar.module.css';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
-class Searchbar extends Component {
-  state = {
-    query: '',
+
+const Searchbar = ({ onSubmit }) => {
+  const [search, setSearch] = useState('');
+
+  const handleChange = event => {
+    setSearch(event.target.value);
   };
 
-  handleChange = event => {
-    this.setState({ query: event.target.value });
-  };
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    if (this.state.query.trim() !== '') {
-      this.props.onSubmit(this.state.query);
+    if (!search.trim()) {
+      return alert('Enter text');
     }
+    onSubmit(search);
+    setSearch('');
   };
 
-  render() {
-    const { query } = this.state;
+  return (
+    <header className={css.Searchbar}>
+      <form className={css.SearchForm} onSubmit={handleSubmit}>
+        <button type="submit" className={css.SearchFormButton}>
+          <HiMagnifyingGlass size="24" />
+        </button>
 
-    return (
-      <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={css.SearchFormButton}>
-            <HiMagnifyingGlass size="24" />
-          </button>
+        <input
+          className={css.SearchFormInput}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="What do you want to find?"
+          value={search}
+          onChange={handleChange}
+        />
+      </form>
+    </header>
+  );
+};
 
-          <input
-            className={css.SearchFormInput}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="What do you want to find?"
-            value={query}
-            onChange={this.handleChange}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
