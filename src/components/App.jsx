@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
@@ -16,12 +16,7 @@ const App = () => {
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [largeImageURL, setLargeImageURL] = useState('');
 
-  useEffect(() => {
-    fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, currentPage]);
-
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     if (!query) return;
     setIsLoading(true);
 
@@ -44,7 +39,11 @@ const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, query]);
+
+  useEffect(() => {
+    fetchImages();
+  }, [query, currentPage, fetchImages]);
 
   const handleSearch = newQuery => {
     if (query === newQuery) {
